@@ -16,9 +16,9 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div>                  
                     <div class="card-body">
-                        <table class="table">
+                        <table class="table" id="table_id">
                             <thead class="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
@@ -29,11 +29,12 @@
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
+                            {{ include('layouts/alerts.html.twig') }}   
                             <tbody>
                             {% for category in categorys %}
                                 <tr>
-                                    <th scope="row">{{category.id}}</th>
-                                    <td>{{category.name}}</td>
+                                    <th scope="row">{{ loop.index }}</th>
+                                    <td>{{category.name|capitalize}}</td>
                                     <td>{{category.active > 0 ? 'Activado' : 'Desactivada' }}</td>
                                     <td>{{category.createdAt|date("m/d/Y")}}</td>
                                     <td>{{category.updatedAt|date("m/d/Y")}}</td>
@@ -63,4 +64,12 @@
         </div>
     </div>
     <script src="{{asset('js/sweetalert.js')}}"></script>
+    <script>
+        $(document).ready( function () {
+            $('#table_id').DataTable({
+                paging: false,
+                searching: false,
+            });
+        });
+    </script>  
 {% endblock %}

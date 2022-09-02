@@ -5,21 +5,23 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[UniqueEntity(fields: 'code',message: 'Ya hay un codigo exactamente igual.')]
+#[UniqueEntity(fields: 'name',message: 'Ya hay un nombre exactamente igual.')]
 class Product
-{
+{   
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(length: 100)]
+    #[Assert\Length(min: 4, max: 10)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $code = null;
-
-    #[ORM\Column(length: 100)]
+    #[Assert\Length(min: 4)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $name = null;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -38,6 +40,14 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    public function __construct($code = null, $name = null, $description = null, $brand = null, $price = null){
+        $this->code = $code;
+        $this->name = $name;
+        $this->description = $description;
+        $this->brand = $brand;
+        $this->price = $price;
+    }
 
     public function getId(): ?int
     {

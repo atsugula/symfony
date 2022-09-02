@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,6 +46,22 @@ class CategoryRepository extends ServiceEntityRepository
             ->createQuery(
                 'SELECT category FROM App:Category category ORDER BY category.id DESC'
             );
+    }
+
+    /* Traer y organizar las categorias de manera asc */
+    public function findAllCategoryAsc(){
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT category FROM App:Category category ORDER BY category.name ASC'
+            )->getResult();
+    }
+
+    /* Buscar si la categoria contiene productos o esta asignada a un producto */
+    public function findProductos($id){
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT product FROM App:Product product WHERE product.category = :id'
+            )->setParameter('id', $id)->getResult();
     }
 
 //    /**

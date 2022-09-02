@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nueva categoria{% endblock %}
+{% block title %}Nueva producto{% endblock %}
 
 {% block body %}
 
@@ -11,9 +11,9 @@
                 <div class="card card-default">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span id="card_title">Creando categoria</span>
+                            <span id="card_title">Creando producto</span>
                             <div class="float-right">
-                                <a href="/categoria" class="btn btn-warning float-right">
+                                <a href="/producto" class="btn btn-warning float-right">
                                     Atrás
                                 </a>
                             </div>
@@ -26,5 +26,10 @@
             </div>
         </div>
     </section>
-
+    <script src="{{asset('js/validaciones.js')}}"></script>
+    <script>
+        $(document).ready(() => {
+            $('.select2').select2();
+        });
+    </script>
 {% endblock %}

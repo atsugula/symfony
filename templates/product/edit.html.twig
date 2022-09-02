@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nueva categoria{% endblock %}
+{% block title %}Actualizando categoria{% endblock %}
 
 {% block body %}
 
@@ -26,5 +26,10 @@
             </div>
         </div>
     </section>
-
+    <script src="{{asset('js/validaciones.js')}}"></script>
+    <script>
+        $(document).ready(() => {
+            $('.select2').select2();
+        });
+    </script>
 {% endblock %}

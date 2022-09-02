@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Observando{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span id="card_title">Observando {{category.name|capitalize}}</span>
+                            <div class="float-right">
+                                <a href="/categoria" class="btn btn-warning float-right">
+                                    Atrás
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <strong>Name:</strong>
+                            {{category.name|capitalize}}
+                        </div>
+                        <div class="form-group">
+                            <strong>Active:</strong>
+                            {{category.active > 1 ? 'Activado' : 'Desactivado' }}
+                        </div>
+                        <div class="form-group">
+                            <strong>Creación:</strong>
+                            {{category.createdAt|date("m/d/Y")}}
+                        </div>
+                        <div class="form-group">
+                            <strong>Última actualización:</strong>
+                            {{category.updatedAt|date("m/d/Y")}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

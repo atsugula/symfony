@@ -39,6 +39,14 @@ class ProductRepository extends ServiceEntityRepository
         }
     }
 
+    /* Traer y organizar productos de manera descendiente */
+    public function findAllProductos(){
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT product FROM App:Product product ORDER BY product.id DESC'
+            );
+    }
+
 //    /**
 //     * @return Product[] Returns an array of Product objects
 //     */

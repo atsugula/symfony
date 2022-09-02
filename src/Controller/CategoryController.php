@@ -14,12 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
+
     private $em;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
+
     //Retorna vista con todas las categorias
     #[Route('/categoria', name: 'app_categoria')]
     public function index(PaginatorInterface $paginator, Request $request): Response
@@ -28,10 +30,11 @@ class CategoryController extends AbstractController
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            3 /*limit per page*/
+            5 /*limit per page*/
         );
-        return $this->render('category/index.html.twig',['categorys' => $pagination, 'i' => 0]);
+        return $this->render('category/index.html.twig',['categorys' => $pagination]);
     }
+
     //Metodo para registrar una categoria
     #[Route('/new/categoria', name: 'new_categoria')]
     public function create(Request $request){
@@ -44,6 +47,7 @@ class CategoryController extends AbstractController
             $category->setCreatedAt(new \DateTime());
             $this->em->persist($category);
             $this->em->flush();
+            $this->addFlash('success', '¡La categoría se registro correctamente.!');
             return $this->redirectToRoute('app_categoria');
         }
 
@@ -52,28 +56,55 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    //Metodo para actualizar la categoria
     #[Route('/edit/categoria/{id}', name: 'edit_categoria')]
-    public function edit($id){
+    public function edit($id, Request $request){
         $category = $this->em->getRepository(Category::class)->find($id);
-        $category->setName('Categoria 4');
-        $category->setUpdatedAt(new \DateTime());
-        $this->em->flush();
-        return new JsonResponse(['success' => true]);
-        // return $this->render('category/create.html.twig');
-    }
+        if (!$category) {
+            throw $this->createNotFoundException('La categoría solicitada no existe.');
+        }
+        //instanciamos la categoria y creamos el form
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
 
+        if($form->isSubmitted() && $form->isValid()){
+            $category->setUpdatedAt(new \DateTime());
+            $this->em->flush();
+            $this->addFlash('success', '¡La categoría se actualizo correctamente.!');
+            return $this->redirectToRoute('app_categoria');
+        }
+
+        return $this->render('category/edit.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+    
+    //Metodo para observar la categoria
     #[Route('/show/categoria/{id}', name: 'show_categoria')]
     public function show($id): Response
     {
         $category = $this->em->getRepository(Category::class)->find($id);
-        return $this->render('category/index.html.twig',['category' => $category]);
+        if (!$category) {
+            throw $this->createNotFoundException('La categoría solicitada no existe.');
+        }
+        return $this->render('category/show.html.twig',['category' => $category]);
     }
 
+    //Metodo para eliminar la categoria, si esta asignada, no se elimina
     #[Route('/remove/categoria/{id}', name: 'remove_categoria')]
     public function remove($id){
         $category = $this->em->getRepository(Category::class)->find($id);
-        $this->em->remove($category);
-        $this->em->flush();
+        if (!$category) {
+            throw $this->createNotFoundException('La categoría solicitada no existe.');
+        }
+        $catWithProducts = $this->em->getRepository(Category::class)->findProductos($category->getId());
+        if(count($catWithProducts) == 0){
+            $this->em->remove($category);
+            $this->em->flush();
+            $this->addFlash('success', '¡La categoría se eliminó correctamente.!');
+            return $this->redirectToRoute('app_categoria');
+        }
+        $this->addFlash('error', '¡La categoría tiene productos asignados.!');
         return $this->redirectToRoute('app_categoria');
     }
 }

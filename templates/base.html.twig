@@ -7,12 +7,13 @@
         {% block stylesheets %}
             <link rel="icon" href="{{asset('img/favicon.png')}}">
             <link href="{{asset('css/select2.min.css')}}" rel="stylesheet"/>
+            <link href="{{asset('css/datatables.css')}}" rel="stylesheet"/>
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
         {% block javascripts %}
             <script src="{{ asset('js/jquery.min.js') }}"></script>
             <script src="{{asset('js/select2.min.js')}}"></script>
-            {# <script src="{{asset('js/sweetalert.js')}}"></script> #}
+            <script src="{{asset('js/datatables.js')}}"></script>
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
