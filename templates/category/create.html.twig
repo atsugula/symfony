@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nueva categoria{% endblock %}
+
+{% block body %}
+
+    <section class="content container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card card-default">
+                    <div class="card-header">
+                        <span class="card-title">Crear categoria</span>
+                    </div>
+                    <div class="card-body">
+                        {{ form(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

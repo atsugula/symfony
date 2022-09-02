@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span id="card_title">Categorias</span>
+                            <div class="float-right">
+                                <a href="/new/categoria" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                    Nuevo categoria
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Active</th>
+                                    <th scope="col">Creación</th>
+                                    <th scope="col">Actualización</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for category in categorys %}
+                                <tr>
+                                    <th scope="row">{{category.id}}</th>
+                                    <td>{{category.name}}</td>
+                                    <td>{{category.active > 0 ? 'Activado' : 'Desactivada' }}</td>
+                                    <td>{{category.createdAt|date("m/d/Y")}}</td>
+                                    <td>{{category.updatedAt|date("m/d/Y")}}</td>
+                                    <td>
+                                        <form action="{{ path('remove_categoria', {'id': category.id}) }}" method="POST" class="form-delete">
+                                            <a class="btn btn-sm btn-primary " href="{{ path('show_categoria', {'id': category.id}) }}"><i class="fa fa-fw fa-eye"></i> Ver</a>
+                                            <a class="btn btn-sm btn-success" href="{{ path('edit_categoria', {'id': category.id}) }}"><i class="fa fa-fw fa-edit"></i> Editar</a>
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No hay categorias</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {# display navigation #}
+                        <div class="navigation">
+                            {{ knp_pagination_render(categorys) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{asset('js/sweetalert.js')}}"></script>
+{% endblock %}
